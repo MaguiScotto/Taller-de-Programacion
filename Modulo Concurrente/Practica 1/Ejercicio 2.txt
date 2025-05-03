@@ -1,0 +1,73 @@
+programa TP1_EJ2
+procesos
+  proceso juntar (ES p:numero)
+  comenzar
+    repetir 19
+      mientras (HayPapelEnLaEsquina)
+        p:= p+1
+        tomarPapel
+      mover
+    mientras (HayPapelEnLaEsquina)
+      p:=p+1
+      tomarPapel
+  fin
+areas
+  ciudad: AreaC(10,10,30,30) 
+robots
+  robot tipo1
+  variables
+    p:numero
+  comenzar
+    p:= 0
+    juntar (p)
+    Informar (p)
+  fin
+  
+  robot tipo2
+  variables
+    p:numero
+  comenzar
+    p:= 0
+    derecha
+    juntar (p)
+    Informar (p)
+  fin
+  
+  robot tipo3
+  variables
+    p:numero
+  comenzar
+    p:= 0
+    repetir 2
+      derecha
+    juntar (p)
+    Informar (p)
+  fin
+  
+  robot tipo4
+  variables
+    p:numero
+  comenzar
+    p:= 0
+    repetir 3
+      derecha
+    juntar (p)
+    Informar (p)
+  fin
+variables
+  robot1:tipo1
+  robot2:tipo2
+  robot3:tipo3
+  robot4:tipo4
+comenzar
+  AsignarArea(robot1,ciudad)
+  AsignarArea(robot2,ciudad)
+  AsignarArea(robot3,ciudad)
+  AsignarArea(robot4,ciudad)
+  Iniciar(robot1,10,10)
+  Iniciar(robot2,10,30)
+  Iniciar(robot3,30,30)
+  Iniciar(robot4,30,10)
+fin 
+    
+    

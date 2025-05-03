@@ -1,0 +1,47 @@
+programa TP1_EJ1
+procesos 
+  proceso contar (ES no:numero; ES f:numero)
+  comenzar
+    si (HayFlorEnLaEsquina)
+      mientras (HayFlorEnLaEsquina)
+        tomarFlor
+        f:= f + 1
+    sino 
+      no:= no + 1
+  fin
+
+areas
+  ciudad: AreaC(1,1,100,100)
+
+robots 
+  robot juntador
+  variables
+    no:numero
+    f: numero
+  comenzar
+    no:=0
+    f:=0
+    repetir 99
+      contar (no,f)
+      mover
+    contar (no,f)
+    repetir f
+      si (HayFlorEnLaBolsa)
+        depositarFlor
+    Informar(no)
+    Informar(f)
+  fin
+    
+variables
+  robot1:juntador
+  robot2:juntador
+  robot3:juntador
+  
+comenzar
+  AsignarArea(robot1, ciudad) 
+  AsignarArea(robot2,ciudad) 
+  AsignarArea(robot3,ciudad)
+  Iniciar(robot1,1,1) 
+  Iniciar(robot2,3,1)
+  Iniciar(robot3,5,1)
+fin

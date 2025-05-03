@@ -1,0 +1,77 @@
+programa TP2_EJ1
+procesos
+  proceso juntar (ES f:numero)
+  comenzar
+    mientras (HayFlorEnLaEsquina)
+      tomarFlor
+      f:= f+1
+  fin
+  
+  proceso recorrer (ES f:numero)
+  comenzar
+    repetir 9
+      juntar(f)
+      mover
+    juntar(f)
+  fin
+
+  proceso maximo (ES f:numero; ES max:numero)
+  comenzar
+    si (f > max)
+      max:= f
+  fin
+
+areas
+  ciudad1: AreaP(1,1,1,10)
+  ciudad2: AreaP(2,11,2,20)
+  ciudad3: AreaP(3,21,3,30)
+  ciudad4: AreaP(4,31,4,40)
+  ciudad5: AreaP(5,41,5,50)
+  ciudad6: AreaP(6,51,6,60)
+  ciudadF: AreaP(2,1,2,1)
+  
+robots
+  robot juntador
+  variables
+    f:numero
+  comenzar
+    f:= 0
+    recorrer(f)
+    EnviarMensaje(f,fiscal)
+  fin
+  
+  robot fiscalizador
+  variables 
+    f,max:numero
+  comenzar
+    max:=0
+    repetir 6
+      RecibirMensaje(f,*)
+      maximo(f,max)  
+    Informar(max)
+  fin
+  
+variables
+  robot1: juntador
+  robot2: juntador
+  robot3: juntador
+  robot4: juntador
+  robot5: juntador
+  robot6: juntador
+  fiscal:fiscalizador
+comenzar
+  AsignarArea(robot1,ciudad1)
+  AsignarArea(robot2,ciudad2)
+  AsignarArea(robot3,ciudad3)
+  AsignarArea(robot4,ciudad4)
+  AsignarArea(robot5,ciudad5)
+  AsignarArea(robot6,ciudad6)
+  AsignarArea(fiscal,ciudadF)
+  Iniciar(robot1,1,1)
+  Iniciar(robot2,2,11)
+  Iniciar(robot3,3,21)
+  Iniciar(robot4,4,31)
+  Iniciar(robot5,5,41)
+  Iniciar(robot6,6,51)
+  Iniciar(fiscal,2,1)
+fin

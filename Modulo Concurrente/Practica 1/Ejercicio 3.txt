@@ -1,0 +1,65 @@
+programa TP1_EJ3
+procesos
+  proceso juntar (ES p:numero; ES f:numero)
+  comenzar
+    mientras (HayFlorEnLaEsquina)
+      tomarFlor
+      f:= f+1
+    mientras (HayPapelEnLaEsquina)
+      tomarPapel
+      p:= p+1
+  fin
+  
+  proceso escalon (E alto:numero; E ancho:numero; ES p:numero; ES f:numero)
+  comenzar
+    repetir alto
+      mover
+      juntar(p,f)
+    derecha
+    repetir ancho
+      mover
+      juntar(p,f)
+    repetir 3
+      derecha
+  fin
+
+areas 
+  ciudad: AreaC (1,1,100,100)
+robots
+  robot escalera
+  variables
+    alto:numero
+    ancho:numero
+    p:numero
+    f:numero
+    cumple:numero
+  comenzar
+    alto:=1
+    ancho:=1
+    p:=0
+    f:=0
+    cumple:=0
+    repetir 4
+      escalon (alto,ancho,p,f)
+      si ((p-f)=1)
+        cumple:=cumple+1
+      alto:= alto+1
+      ancho:= ancho + 1
+    Informar(cumple)
+  fin
+variables
+  robot1:escalera
+  robot2:escalera
+  robot3:escalera
+comenzar
+  AsignarArea(robot1,ciudad)
+  AsignarArea(robot2,ciudad)
+  AsignarArea(robot3,ciudad)
+  Iniciar(robot1,12,14)
+  Iniciar(robot2,17,10)
+  Iniciar(robot3,22,6)
+fin
+  
+  
+  
+  

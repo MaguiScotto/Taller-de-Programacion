@@ -1,0 +1,95 @@
+programa TP3_EJ1
+procesos
+  proceso juntarFlores (ES f:numero)
+  comenzar
+    mientras (HayFlorEnLaEsquina)
+      tomarFlor
+      f:=f+1
+  fin
+  
+  proceso juntarPapel(ES p:numero)
+  comenzar 
+    mientras(HayPapelEnLaEsquina)
+      tomarPapel
+      p:=p+1
+  fin
+  
+  proceso finalizoFlor (E avIni:numero; E caIni:numero; E f:numero)
+  comenzar
+    repetir f
+      BloquearEsquina(10,10)
+      Pos(10,10)
+      depositarFlor
+      Pos(avIni,caIni)
+      LiberarEsquina(10,10)
+  fin
+  
+  proceso finalizoPapel (E avIni:numero; E caIni:numero; E p:numero)
+  comenzar
+    repetir p
+      BloquearEsquina(10,10)
+      Pos(10,10)
+      depositarPapel
+      Pos(avIni,caIni)
+      LiberarEsquina(10,10)
+  fin
+  
+areas
+  areaF: AreaPC (1,1,5,10)
+  areaP: AreaPC (6,1,10,9)
+  todos: AreaC (6,10,10,10)
+robots
+  robot florero
+  variables
+    av,ca,avIni,caIni,f:numero
+  comenzar
+    f:=0
+    avIni:= PosAv
+    caIni:= PosCa
+    repetir 5
+      Random(av,1,5)
+      Random(ca,1,10)
+      BloquearEsquina(av,ca)
+      Pos(av,ca)
+      juntarFlores(f)
+      Pos(avIni,caIni)
+      LiberarEsquina(av,ca)
+    finalizoFlor(avIni,caIni,f)
+  fin
+  
+  robot papelero
+  variables
+    av,ca,avIni,caIni,p:numero
+  comenzar
+    p:=0
+    avIni:= PosAv
+    caIni:= PosCa
+    repetir 3
+      Random(av,6,10)
+      Random(ca,1,9)
+      BloquearEsquina(av,ca)
+      Pos(av,ca)
+      juntarPapel(p)
+      Pos(avIni,caIni)
+      LiberarEsquina(av,ca)
+    finalizoPapel(avIni,caIni,p)
+  fin
+variables
+  robot1:florero
+  robot2:florero
+  robot3:papelero
+  robot4:papelero
+comenzar
+  AsignarArea(robot1,areaF)
+  AsignarArea(robot1,todos)
+  AsignarArea(robot2,areaF)
+  AsignarArea(robot2,todos)
+  AsignarArea(robot3,areaP)
+  AsignarArea(robot3,todos)
+  AsignarArea(robot4,areaP)
+  AsignarArea(robot4,todos)
+  Iniciar(robot1,6,10)
+  Iniciar(robot2,7,10)
+  Iniciar(robot3,8,10)
+  Iniciar(robot4,9,10)
+fin 

@@ -1,0 +1,84 @@
+programa TP2_EJ2
+procesos
+  proceso juntarFlor (ES f:numero)
+  comenzar
+    mientras (HayFlorEnLaEsquina)
+      tomarFlor
+      f:= f+1
+  fin
+  
+  proceso juntarPapel (ES p:numero)
+  comenzar
+    mientras (HayPapelEnLaEsquina)
+      tomarPapel
+      p:= p+1
+  fin
+  
+  proceso contabilizoEscalon (E f:numero; E p:numero; ES cumple:numero)
+  comenzar
+    si (f > p)
+      cumple:= cumple + 1
+  fin
+  
+  proceso centrar
+  comenzar
+    repetir 3
+      derecha
+  fin
+  
+  proceso escalon (E alto:numero; ES f:numero; ES p:numero; ES cumple:numero)
+  comenzar
+    repetir 4
+      repetir alto
+        juntarFlor(f)
+        juntarPapel(p)
+        mover
+      juntarFlor(f)
+      juntarPapel(p)
+      derecha
+      mover
+      centrar
+      contabilizoEscalon(f,p,cumple)
+  fin
+  
+areas
+  ciudad: AreaC (1,1,50,50)
+robots
+  robot juntador
+  variables
+    f,p,alto,cumple:numero
+  comenzar
+    f:=0
+    p:=0
+    cumple:=0
+    Random(alto,1,5)
+    escalon(alto,f,p,cumple)
+    EnviarMensaje(cumple,jefe)
+  fin
+    
+  robot jefazo
+  variables
+    cumple,total:numero
+  comenzar
+    total:= 0
+    repetir 3
+      RecibirMensaje(cumple,*)
+      total:= total + cumple
+    Informar('Suma' , total)
+  fin  
+    
+variables
+  robot1:juntador
+  robot2:juntador
+  robot3:juntador
+  jefe:jefazo
+comenzar
+  AsignarArea(robot1,ciudad)
+  AsignarArea(robot2,ciudad)
+  AsignarArea(robot3,ciudad)
+  AsignarArea(jefe,ciudad)
+  Iniciar(jefe,1,1)
+  Iniciar(robot1,2,1)
+  Iniciar(robot2,7,1)
+  Iniciar(robot3,12,1)
+fin

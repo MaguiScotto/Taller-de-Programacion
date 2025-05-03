@@ -1,0 +1,118 @@
+programa TP2_EJ3B
+procesos
+  proceso juntarPapel (ES p:numero)
+  comenzar
+    mientras (HayPapelEnLaEsquina)
+      tomarPapel
+      p:= p + 1
+  fin
+  
+  proceso juntarFlor (ES f:numero)
+  comenzar
+    mientras (HayFlorEnLaEsquina)
+      tomarFlor
+      f:= f + 1
+  fin
+  
+  proceso recorroFlor (ES f:numero)
+  comenzar
+    repetir 9
+      juntarFlor(f)
+      mover
+    juntarFlor(f)
+  fin
+  
+  proceso recorroPapel (ES p:numero)
+  comenzar
+    repetir 9
+      juntarPapel(p)
+      mover
+    juntarPapel(p)
+  fin
+
+areas
+  areaA1a: AreaP(1,1,10,1)
+  areaA2a: AreaP(11,1,20,1)
+  areaB1a: AreaP(1,5,10,5)
+  areaB2a: AreaP(11,5,20,5)
+  areaA1b: AreaP(21,1,30,1)
+  areaA2b: AreaP(31,1,40,1)
+  areaB1b: AreaP(21,5,30,5)
+  areaB2b: AreaP(31,5,40,5)
+  
+robots
+  robot A1
+  variables
+    p:numero
+  comenzar
+    p:= 0
+    derecha
+    recorroPapel(p)
+    EnviarMensaje(p,rA2)  
+    Pos(21,1)
+    RecibirMensaje(p,rA2)
+    recorroPapel(p)
+    EnviarMensaje(p,rA2)
+  fin
+  
+  robot A2
+  variables
+    p:numero
+  comenzar
+    derecha
+    RecibirMensaje(p,rA1)
+    recorroPapel(p)
+    EnviarMensaje(p,rA1)
+    Pos(31,1)
+    RecibirMensaje(p,rA1)
+    recorroPapel(p)
+    Informar('Total papeles' , p)
+  fin
+  
+  robot B1 
+  variables
+    f:numero
+  comenzar
+    f:=0
+    derecha
+    recorroFlor(f)
+    EnviarMensaje(f,rB2)
+    Pos(21,5)
+    RecibirMensaje(f,rB2)
+    recorroFlor(f)
+    EnviarMensaje(f,rB2)
+  fin
+  
+  robot B2
+  variables
+    f:numero
+  comenzar
+    RecibirMensaje(f,rB1)
+    derecha
+    recorroFlor(f)
+    EnviarMensaje(f,rB1)
+    Pos(31,5)
+    RecibirMensaje(f,rB1)
+    recorroFlor(f)
+    Informar('Total flores' , f)
+  fin
+  
+variables
+  rA1: A1
+  rA2: A2
+  rB1: B1
+  rB2: B2
+comenzar
+  AsignarArea(rA1,areaA1a)
+  AsignarArea(rA1,areaA1b)
+  AsignarArea(rA2,areaA2a)
+  AsignarArea(rA2,areaA2b)
+  AsignarArea(rB1,areaB1a)
+  AsignarArea(rB1,areaB1b)
+  AsignarArea(rB2,areaB2a)
+  AsignarArea(rB2,areaB2b)
+  Iniciar(rA1,1,1)
+  Iniciar(rA2,11,1)
+  Iniciar(rB1,1,5)
+  Iniciar(rB2,11,5)
+fin

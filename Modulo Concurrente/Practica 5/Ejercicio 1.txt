@@ -1,0 +1,115 @@
+programa TP5_EJ1
+procesos
+  proceso juntarFlor (ES f:numero)
+  comenzar
+    mientras HayFlorEnLaEsquina
+      tomarFlor
+      f:= f+1
+  fin
+  
+  proceso juntarPapel (ES p:numero)
+  comenzar
+    mientras HayPapelEnLaEsquina
+      tomarPapel
+      p:= p+1
+  fin
+  
+  proceso recorrerPapel (ES p:numero)
+  comenzar
+    repetir 99
+      juntarPapel(p)
+      mover
+    juntarPapel(p)
+  fin
+  
+  proceso recorrerFlor(ES f:numero)
+  comenzar
+    repetir 99
+      juntarFlor(f)
+      mover
+    juntarFlor(f)
+  fin 
+  
+  proceso asignar
+  comenzar
+    EnviarMensaje(1,r1)
+    EnviarMensaje(2,r2)
+    EnviarMensaje(3,a1)
+    EnviarMensaje(4,a2)
+  fin
+  
+areas
+  rojo1: AreaP(2,1,2,100)
+  rojo2: AreaP(3,1,3,100)
+  azul1: AreaP(98,1,98,100)
+  azul2: AreaP(99,1,99,100)
+  ciudadF: AreaP(1,1,1,1)
+
+robots
+  robot rojo
+  variables
+    f,quienSoy:numero
+  comenzar
+    f:=0
+    RecibirMensaje(quienSoy,fiscal)
+    recorrerFlor(f)
+    EnviarMensaje(quienSoy,fiscal)
+    EnviarMensaje(f,fiscal)
+  fin
+  
+  robot azul
+  variables
+    p,quienSoy:numero
+  comenzar
+    p:=0
+    RecibirMensaje(quienSoy,fiscal)
+    recorrerPapel(p)
+    EnviarMensaje(quienSoy,fiscal)
+    EnviarMensaje(p,fiscal)
+  fin
+  
+  robot fiscalizador
+  variables
+    quien,p,totalPapel,f,totalFlor:numero
+  comenzar
+    totalFlor:=0
+    totalPapel:=0
+    asignar
+    repetir 4
+      RecibirMensaje(quien,*)
+      si (quien=1)| (quien=2)
+        si (quien=1)
+          RecibirMensaje(f,r1)
+        sino
+          RecibirMensaje(f,r2)
+        totalFlor:=totalFlor+f
+      sino
+        si (quien=3)
+          RecibirMensaje(p,a1)
+        sino
+          RecibirMensaje(p,a2)
+        totalPapel:= totalPapel+1
+    si (totalPapel > totalFlor)
+      Informar("azul",0)
+    sino
+      Informar('rojo',0)
+  fin
+   
+variables
+  r1:rojo
+  r2:rojo
+  a1:azul
+  a2:azul
+  fiscal:fiscalizador
+comenzar
+  AsignarArea(r1,rojo1)
+  AsignarArea(r2,rojo2)
+  AsignarArea(a1,azul1)
+  AsignarArea(a2,azul2)
+  AsignarArea(fiscal,ciudadF)
+  Iniciar(r1,2,1)
+  Iniciar(r2,3,1)
+  Iniciar(a1,98,1)
+  Iniciar(a2,99,1)
+  Iniciar(fiscal,1,1)
+fin 

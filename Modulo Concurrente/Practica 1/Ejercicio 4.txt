@@ -1,0 +1,18 @@
+programa TP1_EJ4
+procesos recorroArea1 (
+
+areas
+  area1: AreaPC(1,1,25,25)
+  area2: AreaPC(26,1,50,50)
+  area3: AreaPC(51,1,75,75)
+  area4: AreaPC(76,1,100,100)
+robots
+  robot impar
+  comenzar
+    repetir 24
+      mientras(HayFlorEnLaEsquina)
+        tomarFlor
+      mover
+      
+  
+  
