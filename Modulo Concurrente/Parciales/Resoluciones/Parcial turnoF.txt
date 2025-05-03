@@ -1,0 +1,150 @@
+programa turnoF 
+procesos
+  proceso juntar(ES f:numero)
+  comenzar
+    mientras HayFlorEnLaEsquina
+      tomarFlor
+      f:= f + 1
+  fin
+  
+  proceso centrar
+  comenzar
+    repetir 3
+      derecha
+  fin
+  
+  proceso cuadrado (E lado:numero; ES f:numero; ES ca:numero)
+  comenzar
+    derecha
+    repetir lado
+      juntar(f)
+      mover
+    centrar
+    repetir 2
+      repetir lado
+        juntar(f)
+        mover
+      centrar
+    ca:= PosCa 
+    repetir lado
+      juntar(f)
+      mover
+  fin
+  
+  proceso depositar (E ave:numero; E ca:numero)
+  comenzar
+    BloquearEsquina(50,50)
+    Pos(50,50)
+    si HayFlorEnLaBolsa
+      depositarFlor
+    Pos(ave,ca)
+    LiberarEsquina(50,50)
+  fin
+  
+areas
+  aCoord: AreaP (51,1,51,1)
+  a1: AreaP (1,1,6,30)
+  a2: AreaP (8,1,13,30)
+  a3: AreaP (15,1,20,30)
+  esquina: AreaPC (50,50,50,50)
+robots
+  robot robot1
+  variables
+    f,ave,ca,lado,quienSoy:numero
+    ok:boolean
+  comenzar
+    f:=0
+    ave:= PosAv
+    RecibirMensaje(quienSoy,coordi)
+    repetir 5
+      Random(lado,1,5)
+      cuadrado(lado,f,ca)
+      ok:= V
+      ca:= ca + 1
+      EnviarMensaje(ok,r2)
+      EnviarMensaje(ok,r3)
+      RecibirMensaje(ok,r2)
+      RecibirMensaje(ok,r3)
+      Pos(ave,ca)
+      derecha
+      derecha
+    ca:= PosCa  
+    repetir f
+      depositar(ave,ca)
+  fin
+ 
+  robot robot2
+  variables
+    f,ave,ca,lado,quienSoy:numero
+    ok:boolean
+  comenzar
+    f:=0
+    ave:= PosAv
+    RecibirMensaje(quienSoy,coordi)
+    repetir 5
+      Random(lado,1,5)
+      cuadrado(lado,f,ca)
+      ok:= V
+      ca:= ca + 1
+      EnviarMensaje(ok,r1)
+      EnviarMensaje(ok,r3)
+      RecibirMensaje(ok,r1)
+      RecibirMensaje(ok,r3)
+      Pos(ave,ca)
+      derecha
+      derecha
+    ca:= PosCa  
+    repetir f
+      depositar(ave,ca)
+  fin
+  
+  robot robot3
+  variables
+    f,ave,ca,lado,quienSoy:numero
+    ok:boolean
+  comenzar
+    f:=0
+    ave:= PosAv
+    RecibirMensaje(quienSoy,coordi)
+    repetir 5
+      Random(lado,1,5)
+      cuadrado(lado,f,ca)
+      ok:= V
+      ca:= ca + 1
+      EnviarMensaje(ok,r1)
+      EnviarMensaje(ok,r2)
+      RecibirMensaje(ok,r1)
+      RecibirMensaje(ok,r2)
+      Pos(ave,ca)
+      derecha
+      derecha
+    ca:= PosCa  
+    repetir f
+      depositar(ave,ca)
+  fin
+        
+  robot coordinador
+  comenzar
+    EnviarMensaje(1,r1)
+    EnviarMensaje(2,r2)
+    EnviarMensaje(3,r3)
+  fin
+  
+variables
+  coordi:coordinador
+  r1: robot1
+  r2: robot2
+  r3: robot3
+comenzar
+  AsignarArea(r1,a1)
+  AsignarArea(r1,esquina)
+  AsignarArea(r2,a2)
+  AsignarArea(r2,esquina)
+  AsignarArea(r3,a3)
+  AsignarArea(r3,esquina)
+  AsignarArea(coordi,aCoord)
+  Iniciar(r1,1,1)
+  Iniciar(r2,8,1)
+  Iniciar(r3,15,1)
+  Iniciar(coordi,51,1)
+fin

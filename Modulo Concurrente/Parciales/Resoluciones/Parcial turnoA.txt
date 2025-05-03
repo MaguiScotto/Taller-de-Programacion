@@ -1,0 +1,106 @@
+programa turnoA 
+procesos
+  proceso juntar (ES f:numero; ES ok:boolean)
+  comenzar
+    si HayFlorEnLaEsquina
+      ok:=V
+      mientras HayFlorEnLaEsquina
+        tomarFlor
+        f:=f+1      
+  fin
+  
+  proceso escalon (ES f:numero; ES ok:boolean)
+  comenzar
+    repetir 2
+      juntar(f,ok)
+      mover
+    derecha
+    repetir 2
+      juntar(f,ok)
+      mover
+  fin
+  
+  proceso centrar
+  comenzar
+    repetir 3
+      derecha
+  fin
+  
+  proceso depositar(ES f:numero)
+  variables
+    iniAv,iniCa:numero
+  comenzar
+    iniAv:=PosAv
+    iniCa:=PosCa
+    repetir f
+      BloquearEsquina(99,99)
+      Pos(99,99)
+      si HayFlorEnLaBolsa
+        depositarFlor
+      Pos(iniAv,iniCa)
+      LiberarEsquina(99,99)
+  fin
+  
+  proceso asignarEscalones
+  variables
+    cantEscalon:numero
+  comenzar
+    Random(cantEscalon,1,5)
+    EnviarMensaje(cantEscalon,r1)
+    Random(cantEscalon,1,5)
+    EnviarMensaje(cantEscalon,r2)
+    Random(cantEscalon,1,5)
+    EnviarMensaje(cantEscalon,r3)
+  fin
+  
+areas
+  deposito: AreaPC (99,99,99,99)
+  ciudad: AreaC (1,1,90,90)
+
+robots
+  robot florero
+  variables
+    f,cantEscalon,sinFlor:numero
+    ok:boolean
+  comenzar
+    f:=0
+    sinFlor:=0
+    RecibirMensaje(cantEscalon,fiscal)
+    repetir cantEscalon
+      ok:= F
+      escalon(f,ok)
+      centrar
+      si (ok=F)
+        sinFlor:= sinFlor+1
+      depositar(f)
+    EnviarMensaje(sinFlor,fiscal)
+  fin
+
+  robot fiscalizador
+  variables
+    sinFlor,total:numero
+  comenzar
+    total:=0
+    asignarEscalones
+    repetir 3
+      RecibirMensaje(sinFlor,*)
+      total:= total + sinFlor
+    Informar(total)
+  fin
+    
+variables
+  r1,r2, r3:florero
+  fiscal:fiscalizador
+comenzar
+  AsignarArea(r1,ciudad)
+  AsignarArea(r1,deposito)
+  AsignarArea(r2,ciudad)
+  AsignarArea(r2,deposito)
+  AsignarArea(r3,ciudad)
+  AsignarArea(r3,deposito)
+  AsignarArea(fiscal,ciudad)
+  Iniciar(r1,2,1)
+  Iniciar(r2,20,1)
+  Iniciar(r3,40,1)
+  Iniciar(fiscal,1,1)
+fin

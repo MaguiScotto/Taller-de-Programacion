@@ -1,0 +1,186 @@
+programa turnoC
+procesos
+  proceso juntarFlor (ES f:numero)
+  comenzar
+    mientras (HayFlorEnLaEsquina)
+      tomarFlor
+      f:= f + 1
+  fin
+  
+  proceso juntarPapel (ES p:numero)
+  comenzar
+    mientras (HayPapelEnLaEsquina)
+      tomarPapel
+      p:= p + 1
+  fin
+  
+  proceso bloquearFlor(E ave:numero; E calle:numero; ES f:numero)
+  variables
+    aux:numero
+  comenzar
+    BloquearEsquina(ave,calle)
+    Pos(ave,calle)
+    juntarFlor(f)
+    aux:= calle + 1
+    Pos(ave,aux)
+    LiberarEsquina(ave,calle)
+  fin
+    
+  proceso bloquearPapel(E ave:numero; E calle:numero; ES p:numero)
+  variables
+    aux:numero
+  comenzar
+    BloquearEsquina(ave,calle)
+    Pos(ave,calle)
+    juntarPapel(p)
+    aux:= ave + 1
+    Pos(aux,calle)
+    LiberarEsquina(ave,calle)
+  fin   
+  
+  proceso asignar
+  comenzar
+    EnviarMensaje(1,RF1)
+    EnviarMensaje(2,RF2)
+    EnviarMensaje(3,RP)
+  fin
+ 
+  proceso maximo(E max:numero; ES quienMax:numero; E f1:numero; E f2:numero; E p:numero)
+  comenzar
+    si(f1 > f2)
+      max:=f1
+      quienMax:=1
+    sino
+      max:=f2
+      quienMax:=2
+    si (p > max)
+      max:=f3 
+      quienMax:=3
+  fin  
+ 
+  proceso ganador(E quienMax:numero)
+  variables
+    ok:boolean
+  comenzar
+    ok:=F
+    si(quienMax=1)
+      EnviarMensaje(ok,RF2)
+      EnviarMensaje(ok,RP)
+      ok:=V
+      EnviarMensaje(ok,RF1)
+    sino
+      si(quienMax=2)
+        EnviarMensaje(ok,RF1)
+        EnviarMensaje(ok,RP)
+        ok:=V
+        EnviarMensaje(ok,RF2)
+      sino
+        EnviarMensaje(ok,RF1)
+        EnviarMensaje(ok,RF2)
+        ok:=V
+        EnviarMensaje(ok,RP)
+  fin
+  
+areas
+  areaFiscal: AreaP(1,1,1,1)
+  ciudad: AreaPC(2,1,100,100)
+
+robots
+  robot florero
+  variables
+    f:numero
+    calle:numero
+    auxCalle:numero
+    ave:numero
+    quienSoy:numero
+    ok:boolean
+  comenzar
+    f:= 0
+    ave:= PosAv
+    RecibirMensaje(quienSoy,fiscal)
+    RecibirMensaje(calle,fiscal)
+    repetir 98
+      auxCalle:= PosCa
+      juntarFlor(f)
+      si ((auxCalle+1) = calle)
+        bloquearFlor (ave,calle,f)
+      sino
+        mover  
+    juntarFlor(f) 
+    EnviarMensaje(quienSoy,fiscal)
+    EnviarMensaje(f,fiscal)  
+    RecibirMensaje(ok,fiscal)
+    si(ok=V)
+      Pos(ave,1)
+  fin
+  
+  robot papelero
+  variables
+    p:numero
+    calle:numero
+    auxAve:numero
+    ave:numero
+    quienSoy:numero
+    ok:boolean
+    sigAve:numero
+  comenzar
+    p:= 0
+    ave:= PosAv
+    RecibirMensaje(quienSoy,fiscal)
+    RecibirMensaje(calle,fiscal)
+    Pos(ave,calle)
+    derecha
+    repetir 96
+      auxAve:= PosAv
+      sigAve:=auxAve + 1
+      juntarPapel(p)
+      si ((sigAve = 6)|(sigAve =11))
+        bloquearPapel (sigAve,calle,p)
+      sino
+        mover  
+    juntarPapel(p) 
+    EnviarMensaje(quienSoy,fiscal)
+    EnviarMensaje(p,fiscal)   
+    RecibirMensaje(ok,fiscal)
+    si(ok=V)
+      Pos(2,1)
+  fin
+
+  robot fiscalizador
+  variables
+    f1,f2,p,quien,calle:numero
+    max,quienMax:numero
+  comenzar
+    asignar
+    Random(calle,2,20)
+    EnviarMensaje(calle,RP)
+    EnviarMensaje(calle,RF1)
+    EnviarMensaje(calle,RF2)
+    repetir 3
+      RecibirMensaje(quien,*)
+      si (quien=1)
+        RecibirMensaje(f1,RF1)
+      sino
+        si (quien=2)
+          RecibirMensaje(f2,RF2)
+        sino
+          RecibirMensaje(p,RP)
+    maximo(max,quienMax,f1,f2,p)
+    ganador(quienMax)
+  fin
+
+variables
+  RF1:florero
+  RF2:florero
+  RP:papelero
+  fiscal:fiscalizador
+comenzar
+  AsignarArea(fiscal,areaFiscal)
+  AsignarArea(RF1,ciudad)
+  AsignarArea(RF2,ciudad)
+  AsignarArea(RP,ciudad)
+  Iniciar(RF1,6,1)
+  Iniciar(RF2,11,1)
+  Iniciar(RP,2,1)
+  Iniciar(fiscal,1,1)
+fin

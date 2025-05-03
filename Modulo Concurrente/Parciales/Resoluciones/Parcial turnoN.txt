@@ -1,0 +1,131 @@
+programa turnoN 
+procesos
+  proceso juntarPapel(ES p:numero)
+  comenzar
+    mientras HayPapelEnLaEsquina
+      tomarPapel
+      p:=p+1
+  fin
+  
+  proceso escalon (E alto:numero; E ancho:numero; ES p:numero)
+  comenzar
+    repetir alto
+      juntarPapel(p)
+      mover
+    derecha
+    repetir ancho
+      juntarPapel(p)
+      mover
+  fin
+  
+  proceso depositar(E ave:numero; E ca:numero)
+  comenzar
+    BloquearEsquina(100,100)
+    Pos(100,100)
+    mientras HayPapelEnLaBolsa
+      depositarPapel
+    Pos(ave,ca)
+    LiberarEsquina(100,100)
+  fin
+  
+  proceso asignarID
+  comenzar
+    EnviarMensaje(1,r1)
+    EnviarMensaje(2,r2)
+    EnviarMensaje(3,r3)
+  fin
+  
+  proceso asignarEscalon
+  variables
+    alto,ancho:numero
+  comenzar
+    Random(alto,1,4)
+    EnviarMensaje(alto,r1)
+    Random(ancho,1,3)
+    EnviarMensaje(ancho,r1)
+    Random(alto,1,4)
+    EnviarMensaje(alto,r2)
+    Random(ancho,1,3)
+    EnviarMensaje(ancho,r2)
+    Random(alto,1,4)
+    EnviarMensaje(alto,r3)
+    Random(ancho,1,3)
+    EnviarMensaje(ancho,r3)
+  fin
+  
+  proceso maximo(E p:numero; E quien:numero; ES max:numero; ES quienMax:numero)
+  comenzar
+    si (p > max)
+      max:= p
+      quienMax:= quien
+  fin
+  
+  proceso centrar
+  comenzar
+    repetir 3
+      derecha
+  fin
+  
+areas
+  esqFiscal: AreaP(1,1,1,1)
+  deposito: AreaPC(100,100,100,100)
+  a1: AreaP(2,1,12,13)
+  a2: AreaP(32,1,42,13)
+  a3: AreaP(62,1,72,13)
+
+robots
+  robot fiscalizador
+  variables
+    quien,p,max,quienMax:numero
+  comenzar
+    max:= -1
+    asignarID
+    asignarEscalon
+    repetir 3
+      RecibirMensaje(quien,*)
+      si (quien=1)
+        RecibirMensaje(p,r1)
+      sino
+        si (quien=2)
+          RecibirMensaje(p,r2)
+        sino
+          RecibirMensaje(p,r3)
+      maximo(p,quien,max,quienMax)
+    Informar("Gana el r", quienMax)
+  fin
+  
+  robot papelero
+  variables
+    quienSoy,alto,ancho,p:numero
+    ave,ca:numero
+  comenzar
+    p:= 0
+    RecibirMensaje(quienSoy,fiscal)
+    RecibirMensaje(alto,fiscal)
+    RecibirMensaje(ancho,fiscal)
+    repetir 3
+      escalon(alto,ancho,p)
+      centrar
+    ave:=PosAv
+    ca:=PosCa
+    depositar(ave,ca)
+    EnviarMensaje(quienSoy,fiscal)
+    EnviarMensaje(p,fiscal)
+  fin
+    
+variables
+  r1,r2,r3:papelero
+  fiscal:fiscalizador
+comenzar
+  AsignarArea(r1,a1)
+  AsignarArea(r1,deposito)
+  AsignarArea(r2,a2)
+  AsignarArea(r2,deposito)
+  AsignarArea(r3,a3)
+  AsignarArea(r3,deposito)
+  AsignarArea(fiscal,esqFiscal)
+  Iniciar(r1,2,1)
+  Iniciar(r2,32,1)
+  Iniciar(r3,62,1)
+  Iniciar(fiscal,1,1)
+fin
